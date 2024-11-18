@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banco Krells</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background-color: #0033cc;
+      color: white;
+      padding: 10px;
+    }
+    .container {
+      margin: 20px auto;
+      max-width: 500px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .hidden {
+      display: none;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #0033cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #0055ff;
+    }
+    footer {
+      margin-top: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Banco Krells</h1>
+  </header>
+  <div class="container" id="login-container">
+    <h2>Login</h2>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Nome" required><br><br>
+      <input type="password" id="password" placeholder="Senha" required><br><br>
+      <button type="submit" class="button">Entrar</button>
+    </form>
+  </div>
+
+  <div class="container hidden" id="dashboard-container">
+    <h2>Bem-vindo, <span id="user-name"></span>!</h2>
+    <p>Saldo em reais: R$ <span id="saldo-reais">0.00</span></p>
+    <p>Saldo em Krells: <span id="saldo-krells">0</span> Krells</p>
+    <button class="button" id="investir-instantaneo">Investimento Instantâneo</button>
+    <button class="button" id="investir-garantido">Investimento Garantido</button>
+  </div>
+
+  <footer>
+    <p>&copy; 2140 - Banco Krells</p>
+  </footer>
+  <script>
+    // Simulated database
+    const users = {};
+
+    // Login form handler
+    const loginForm = document.getElementById('login-form');
+    const loginContainer = document.getElementById('login-container');
+    const dashboardContainer = document.getElementById('dashboard-container');
+    const userNameDisplay = document.getElementById('user-name');
+    const saldoReaisDisplay = document.getElementById('saldo-reais');
+    const saldoKrellsDisplay = document.getElementById('saldo-krells');
+
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Check if user exists, otherwise create a new one
+      if (!users[username]) {
+        users[username] = {
+          password: password,
+          saldoReais: 0,
+          saldoKrells: 0,
+        };
+        alert('Conta criada com sucesso!');
+      } else if (users[username].password !== password) {
+        alert('Senha incorreta!');
+        return;
+      }
+
+      // Login successful
+      userNameDisplay.textContent = username;
+      updateDashboard(username);
+      loginContainer.classList.add('hidden');
+      dashboardContainer.classList.remove('hidden');
+    });
+
+    // Update dashboard
+    function updateDashboard(username) {
+      const user = users[username];
+      saldoReaisDisplay.textContent = user.saldoReais.toFixed(2);
+      saldoKrellsDisplay.textContent = user.saldoKrells;
+    }
+
+    // Investimento instantâneo
+    document.getElementById('investir-instantaneo').addEventListener('click', () => {
+      const username = userNameDisplay.textContent;
+      const user = users[username];
+      user.saldoReais += 1; // Simula ganho instantâneo
+      updateDashboard(username);
+      alert('Você ganhou R$ 1 instantaneamente!');
+    });
+
+    // Investimento garantido
+    document.getElementById('investir-garantido').addEventListener('click', () => {
+      const username = userNameDisplay.textContent;
+      const user = users[username];
+      user.saldoReais += 10; // Simula ganho garantido
+      updateDashboard(username);
+      alert('Você ganhou R$ 10 após o investimento garantido!');
+    });
+  </script>
+</body>
+</html>
